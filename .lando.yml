@@ -1,0 +1,4 @@
+name: spelling-bee-fisk
+recipe: lamp
+config:
+  webroot: .

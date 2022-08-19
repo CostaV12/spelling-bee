@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @file
+ */
+
 require __DIR__ . '/bootstrap.php';
 
 use Service\Container;
@@ -53,16 +57,17 @@ $wordsJson = json_encode($words, JSON_UNESCAPED_UNICODE);
         <br>
         <form class="mb-5">
           <div class="form-group">
-            <textarea name="text-box" id="text-input" class="form-control form-control-lg"
+            <textarea style="resize:none;"name="text-box" id="text-input" class="form-control form-control-lg"
             placeholder="Type the word..."></textarea>
           </div>
           <input type="submit" value="Send"/>
         </form>
         <p id="result">Your answer is...</p>
         <br>
-        <br>
-        <br>
         <p id="translate"></p>
+        <div class="d-grid gap-2 col-6 mx-auto">
+          <button class="btn btn-secondary btn-lg" type="button" id="btnNextWord">Next Word</button>
+        </div>
       </div>
     </div>
   </div>
@@ -83,6 +88,9 @@ $wordsJson = json_encode($words, JSON_UNESCAPED_UNICODE);
     const result = document.querySelector('#result');
     const numberWord = document.querySelector("#numberWord");
     const translateText = document.querySelector("#translate");
+    const btnNextWord = document.querySelector("#btnNextWord");
+
+    btnNextWord.style.display = "none";
 
     //Words
     let words = <?php echo $wordsJson ?>;
@@ -95,7 +103,7 @@ $wordsJson = json_encode($words, JSON_UNESCAPED_UNICODE);
     }
 
     const getTranslate = () => {
-      translate = words[0]['translate'];
+      translate = words[0]['translation'];
 
       return translate;
     }
@@ -131,7 +139,7 @@ $wordsJson = json_encode($words, JSON_UNESCAPED_UNICODE);
           console.error('Something went wrong');
         };
 
-        speakText.voice = voices[0];
+        speakText.voice = voices[1];
 
         speakText.rate = 1;
         speakText.pitch = 1;
@@ -143,7 +151,7 @@ $wordsJson = json_encode($words, JSON_UNESCAPED_UNICODE);
 
     //Translate
     const translate = () => {
-      translateText.innerHTML = words[0]['translate'];
+      translateText.innerHTML = words[0]['translation'];
 
       setTimeout(() => {
         translateText.innerHTML = '';
@@ -169,20 +177,23 @@ $wordsJson = json_encode($words, JSON_UNESCAPED_UNICODE);
       }
     });
 
+    btnNextWord.addEventListener('click', e => {
+      result.innerHTML = "Your answer is...";
+      speak();
+    });
+
     textForm.addEventListener('submit', e => {
       e.preventDefault();
-      console.log("Is working");
-      wordsPlayed++;
-      words.splice(0, 1);
-      console.log(words);
       if(wordsPlayed <= 5){
         if(textInput.value.toUpperCase() == word){
           wordsCorrects++;
           result.innerHTML = 'The answer is correct';
-          speak();
         }else{
-          result.innerHTML = 'The answer is incorrect! Type again';
+          result.innerHTML = 'The answer is incorrect!<br>The correct answer is ' + words[0]['word'];
         }
+        btnNextWord.style.display = "inline-block";
+        wordsPlayed++;
+        words.splice(0, 1);
         numberWord.innerHTML = 'Word ' + wordsPlayed;
         speakTimes = 3;
         translateTimes = 3;
