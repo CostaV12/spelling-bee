@@ -179,6 +179,9 @@ $wordsJson = json_encode($words, JSON_UNESCAPED_UNICODE);
 
     btnNextWord.addEventListener('click', e => {
       result.innerHTML = "Your answer is...";
+      btnNextWord.style.display = "none";
+      textInput.value = "";
+      textInput.placeholder = "Type the word...";
       speak();
     });
 
