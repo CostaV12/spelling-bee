@@ -71,6 +71,35 @@ $wordsJson = json_encode($words, JSON_UNESCAPED_UNICODE);
       </div>
     </div>
   </div>
+
+  <style>
+    .modal{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .modal-title, #wordsCorrectResult{
+      color: black;
+    }
+  </style>
+
+  <div class="modal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Results</h5>
+        </div>
+        <div class="modal-body">
+          <p id="wordsCorrectResult"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary">Play Again</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     let wordsPlayed = 1;
     let wordsCorrects = 0;
@@ -89,6 +118,8 @@ $wordsJson = json_encode($words, JSON_UNESCAPED_UNICODE);
     const numberWord = document.querySelector("#numberWord");
     const translateText = document.querySelector("#translate");
     const btnNextWord = document.querySelector("#btnNextWord");
+    const modal = document.querySelector('.modal');
+    const wordsCorrectResult = document.querySelector('#wordsCorrectResult');
 
     btnNextWord.style.display = "none";
 
@@ -187,7 +218,7 @@ $wordsJson = json_encode($words, JSON_UNESCAPED_UNICODE);
 
     textForm.addEventListener('submit', e => {
       e.preventDefault();
-      if(wordsPlayed <= 5){
+      if(wordsPlayed < 5){
         if(textInput.value.toUpperCase() == word){
           wordsCorrects++;
           result.innerHTML = 'The answer is correct';
@@ -202,6 +233,9 @@ $wordsJson = json_encode($words, JSON_UNESCAPED_UNICODE);
         translateTimes = 3;
         btnSpeak.innerHTML = "Speak! (" + speakTimes + "x)";
         btnTranslate.innerHTML = "Translate! (" + translateTimes + "x)";
+      }else {
+        wordsCorrectResult.innerHTML = "You answered " + wordsCorrects + " of 5."
+        modal.style.display = "block";
       }
     });
 
