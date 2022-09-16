@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @file
- */
-
 require __DIR__ . '/bootstrap.php';
 
 use Service\Container;
@@ -147,6 +143,7 @@ $wordsJson = json_encode($words, JSON_UNESCAPED_UNICODE);
       voices = synth.getVoices();
     };
 
+    console.log(getVoices());
     getVoices();
 
     if (synth.onvoiceschanged !== undefined) {

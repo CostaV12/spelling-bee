@@ -14,7 +14,7 @@ class PdoWordStorage
   public function fetchAllWords()
   {
     $pdo = $this->pdo;
-    $stmt = $pdo->prepare("SELECT * FROM words ORDER BY RAND() LIMIT 5 ");
+    $stmt = $pdo->prepare("SELECT * FROM words WHERE fase = 2 ORDER BY RAND() LIMIT 5 ");
     $stmt->execute();
     $wordsArray = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
